@@ -64,7 +64,8 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.AloneVpn.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

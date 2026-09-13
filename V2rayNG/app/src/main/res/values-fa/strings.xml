@@ -557,4 +557,37 @@
     <string name="connection_test_empty_message">جزئیاتی در دسترس نیست</string>
     <string name="value_unknown">ناشناخته</string>
 
+    <!-- ALONE VPN — صفحه‌ی خانه (پورت‌شده از alone_vpn_v12.html) -->
+    <string name="alone_tagline">خصوصی. رمزنگاری‌شده. سریع.</string>
+    <string name="alone_st_off">وصل نیستی</string>
+    <string name="alone_st_connecting">در حال اتصال…</string>
+    <string name="alone_st_on">ترافیکت محافظت می‌شود</string>
+    <string name="alone_st_failed">اتصال برقرار نشد</string>
+    <string name="alone_st_disconnecting">در حال قطع…</string>
+    <string name="alone_sub_tap">برای اتصال ضربه بزن</string>
+    <string name="alone_sub_retry">یک بار دیگر امتحان کن</string>
+    <string name="alone_sub_cancel">برای لغو ضربه بزن</string>
+    <string name="alone_sub_via">از طریق %1$s</string>
+    <string name="alone_v_off">قطع</string>
+    <string name="alone_v_on">متصل</string>
+    <string name="alone_v_conn">در حال اتصال</string>
+    <string name="alone_v_dis">در حال قطع</string>
+    <string name="alone_v_fail">ناموفق</string>
+    <string name="alone_hs_resolve">یافتن نشانی</string>
+    <string name="alone_hs_tcp">اتصال TCP</string>
+    <string name="alone_hs_tls">دست‌دادن TLS</string>
+    <string name="alone_hs_tunnel">بالا آمدن تانل</string>
+    <string name="alone_k_status">وضعیت</string>
+    <string name="alone_k_latency">تأخیر</string>
+    <string name="alone_k_exit">آی‌پی خروجی</string>
+    <string name="alone_active_server">سرور فعال</string>
+    <string name="alone_t_latency">تست تأخیر</string>
+    <string name="alone_t_dns">DNS بازی</string>
+    <string name="alone_t_import">افزودن کانفیگ</string>
+    <string name="alone_recents">سرورهای اخیر</string>
+    <string name="alone_see_all">همه</string>
+    <string name="alone_al_log">گزارش اتصال</string>
+    <string name="alone_al_help">راهنما</string>
+    <string name="alone_al_connect">اتصال یا قطع تانل</string>
+
 </resources>

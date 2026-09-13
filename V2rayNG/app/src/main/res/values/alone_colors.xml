@@ -1,0 +1,7 @@
+<resources>
+    <!-- oklch(.155 .014 265) — obsidian/dark surface, computed ahead of time since the
+         splash screen renders before DataStore/Compose can pick a theme. -->
+    <color name="alone_splash_background">#090C12</color>
+    <!-- oklch(.805 .135 265) — obsidian/dark primary -->
+    <color name="alone_splash_icon_background">#95BDFF</color>
+</resources>

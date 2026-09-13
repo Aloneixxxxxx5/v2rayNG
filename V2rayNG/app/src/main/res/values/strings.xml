@@ -557,4 +557,37 @@
     <string name="connection_test_empty_message">no details available</string>
     <string name="value_unknown">unknown</string>
 
+    <!-- ALONE VPN — Home screen (ported from alone_vpn_v12.html) -->
+    <string name="alone_tagline">Private. Encrypted. Fast.</string>
+    <string name="alone_st_off">Not connected</string>
+    <string name="alone_st_connecting">Connecting…</string>
+    <string name="alone_st_on">Your traffic is protected</string>
+    <string name="alone_st_failed">Connection failed</string>
+    <string name="alone_st_disconnecting">Disconnecting…</string>
+    <string name="alone_sub_tap">Tap to connect</string>
+    <string name="alone_sub_retry">Give it another try</string>
+    <string name="alone_sub_cancel">Tap to cancel</string>
+    <string name="alone_sub_via">via %1$s</string>
+    <string name="alone_v_off">Off</string>
+    <string name="alone_v_on">Connected</string>
+    <string name="alone_v_conn">Connecting</string>
+    <string name="alone_v_dis">Stopping</string>
+    <string name="alone_v_fail">Failed</string>
+    <string name="alone_hs_resolve">Resolve</string>
+    <string name="alone_hs_tcp">TCP connect</string>
+    <string name="alone_hs_tls">TLS handshake</string>
+    <string name="alone_hs_tunnel">Tunnel up</string>
+    <string name="alone_k_status">Status</string>
+    <string name="alone_k_latency">Latency</string>
+    <string name="alone_k_exit">Exit IP</string>
+    <string name="alone_active_server">Active server</string>
+    <string name="alone_t_latency">Latency test</string>
+    <string name="alone_t_dns">Ad-block DNS</string>
+    <string name="alone_t_import">Add config</string>
+    <string name="alone_recents">Recent servers</string>
+    <string name="alone_see_all">See all</string>
+    <string name="alone_al_log">Connection log</string>
+    <string name="alone_al_help">Help</string>
+    <string name="alone_al_connect">Connect or disconnect the tunnel</string>
+
 </resources>

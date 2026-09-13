@@ -18,4 +18,14 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
+
+    <!-- ALONE VPN — androidx.core.splashscreen theme. The prototype's own comment is explicit that
+         a splash is `androidx.core.splashscreen`, not a Composable screen to animate by hand — see
+         SPLASH_INTEGRATION.md for the two manual wiring steps (manifest + MainActivity) this needs. -->
+    <style name="Theme.AloneVpn.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/alone_splash_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/alone_splash_icon</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/alone_splash_icon_background</item>
+        <item name="postSplashScreenTheme">@style/AppThemeDayNight.NoActionBar</item>
+    </style>
 </resources>

@@ -4,6 +4,7 @@ desugarJdkLibs = "2.1.5"
 gradleLicensePlugin = "0.9.9"
 kotlin = "2.4.10"
 coreKtx = "1.19.0"
+coreSplashscreen = "1.0.1"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
@@ -23,6 +24,7 @@ reorderable = "3.1.0"
 coil = "2.7.0"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdkLibs" }
 gradle-license-plugin = { module = "com.jaredsburrows:gradle-license-plugin", version.ref = "gradleLicensePlugin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
