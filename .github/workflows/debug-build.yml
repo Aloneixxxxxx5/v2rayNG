@@ -82,7 +82,21 @@ jobs:
       run: |
         cd ${{ github.workspace }}/V2rayNG
         chmod 755 gradlew
-        ./gradlew assembleDebug 2>&1 | tee /tmp/gradle_output.log
+        ./gradlew assembleFdroidDebug assemblePlaystoreDebug 2>&1 | tee /tmp/gradle_output.log
+
+    - name: Write output-tree diagnostic (always, cheap, can't fail)
+      if: always()
+      run: |
+        find ${{ github.workspace }}/V2rayNG -iname "*.apk" > /tmp/apk_find.txt 2>&1
+        echo "---" >> /tmp/apk_find.txt
+        ls -laR ${{ github.workspace }}/V2rayNG/app/build/outputs >> /tmp/apk_find.txt 2>&1
+
+    - name: Upload diagnostic text (tests whether artifact downloads are reachable at all)
+      uses: actions/upload-artifact@v7
+      with:
+        name: diagnostic
+        path: /tmp/apk_find.txt
+        if-no-files-found: warn
 
     - name: Report compile errors as a commit comment (my sandbox can't reach Azure blob log storage, only api.github.com)
       if: failure()
