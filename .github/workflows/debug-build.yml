@@ -99,6 +99,21 @@ jobs:
         } > /tmp/error_comment.txt
         python3 -c "import json,os,urllib.request; body=open('/tmp/error_comment.txt').read(); url='https://api.github.com/repos/'+os.environ['REPO']+'/commits/'+os.environ['SHA']+'/comments'; req=urllib.request.Request(url, data=json.dumps({'body':body}).encode(), headers={'Authorization':'Bearer '+os.environ['GITHUB_TOKEN'],'Accept':'application/vnd.github+json'}, method='POST'); urllib.request.urlopen(req)"
 
+    - name: Report actual APK output paths (upload-artifact matched 0 files last run)
+      if: always()
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        REPO: ${{ github.repository }}
+        SHA: ${{ github.sha }}
+      run: |
+        {
+          echo '### APK output tree'
+          echo '```'
+          find ${{ github.workspace }}/V2rayNG/app/build/outputs -type f 2>&1 | head -c 20000
+          echo '```'
+        } > /tmp/apk_paths.txt
+        python3 -c "import json,os,urllib.request; body=open('/tmp/apk_paths.txt').read(); url='https://api.github.com/repos/'+os.environ['REPO']+'/commits/'+os.environ['SHA']+'/comments'; req=urllib.request.Request(url, data=json.dumps({'body':body}).encode(), headers={'Authorization':'Bearer '+os.environ['GITHUB_TOKEN'],'Accept':'application/vnd.github+json'}, method='POST'); urllib.request.urlopen(req)"
+
     - name: Upload debug APKs
       uses: actions/upload-artifact@v7
       with:
