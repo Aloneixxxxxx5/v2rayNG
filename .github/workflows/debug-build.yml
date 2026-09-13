@@ -1,0 +1,91 @@
+name: Debug Build (no signing needed)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v7
+      with:
+        submodules: 'recursive'
+        fetch-depth: '0'
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v4
+      with:
+        log-accepted-android-sdk-licenses: false
+        cmdline-tools-version: '14742923'
+        packages: 'platforms;android-37.0 build-tools;37.0.0 platform-tools'
+
+    - name: Install NDK
+      run: |
+        echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
+          --channel=0 \
+          --install "ndk;29.0.14206865"
+        echo "NDK_HOME=$ANDROID_HOME/ndk/29.0.14206865" >> $GITHUB_ENV
+        sed -i '10i\
+        \
+            ndkVersion = "29.0.14206865"' ${{ github.workspace }}/V2rayNG/app/build.gradle.kts
+
+    - name: Restore cached libhevtun
+      id: cache-libhevtun-restore
+      uses: actions/cache/restore@v6
+      with:
+        path: ${{ github.workspace }}/libs
+        key: libhevtun-${{ runner.os }}-${{ env.NDK_HOME }}-${{ hashFiles('.git/modules/hev-socks5-tunnel/HEAD') }}-${{ hashFiles('compile-hevtun.sh') }}
+
+    - name: Build libhevtun
+      if: steps.cache-libhevtun-restore.outputs.cache-hit != 'true'
+      run: bash compile-hevtun.sh
+
+    - name: Save libhevtun
+      if: steps.cache-libhevtun-restore.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v6
+      with:
+        path: ${{ github.workspace }}/libs
+        key: libhevtun-${{ runner.os }}-${{ env.NDK_HOME }}-${{ hashFiles('.git/modules/hev-socks5-tunnel/HEAD') }}-${{ hashFiles('compile-hevtun.sh') }}
+
+    - name: Copy libhevtun into app module
+      run: cp -r ${{ github.workspace }}/libs ${{ github.workspace }}/V2rayNG/app
+
+    - name: Fetch AndroidLibXrayLite tag
+      run: |
+        pushd AndroidLibXrayLite
+        echo "CURRENT_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+        popd
+
+    - name: Download prebuilt libv2ray.aar (real Xray-core binding)
+      uses: robinraju/release-downloader@v1.13
+      with:
+        repository: '2dust/AndroidLibXrayLite'
+        tag: ${{ env.CURRENT_TAG }}
+        fileName: 'libv2ray.aar'
+        out-file-path: V2rayNG/app/libs/
+
+    - name: Setup Java
+      uses: actions/setup-java@v5.7.0
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+
+    - name: Build debug APK
+      run: |
+        cd ${{ github.workspace }}/V2rayNG
+        chmod 755 gradlew
+        ./gradlew assembleDebug
+
+    - name: Upload debug APKs
+      uses: actions/upload-artifact@v7
+      with:
+        name: debug-apks
+        path: V2rayNG/app/build/outputs/apk/*/debug/*.apk
