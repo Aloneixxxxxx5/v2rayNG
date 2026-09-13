@@ -82,7 +82,31 @@ jobs:
       run: |
         cd ${{ github.workspace }}/V2rayNG
         chmod 755 gradlew
-        ./gradlew assembleDebug
+        ./gradlew assembleDebug 2>&1 | tee /tmp/gradle_output.log
+
+    - name: Report compile errors as a commit comment (my sandbox can't reach Azure blob log storage, only api.github.com)
+      if: failure()
+      run: |
+        {
+          echo '### Debug build failed — relevant output'
+          echo '```'
+          grep -B2 -A30 -iE "^e: |error:|FAILURE:|What went wrong" /tmp/gradle_output.log | head -c 60000
+          echo '```'
+        } > /tmp/error_comment.txt
+        python3 -c "
+import json, urllib.request, os
+with open('/tmp/error_comment.txt') as f:
+    body = f.read()
+req = urllib.request.Request(
+    'https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/comments',
+    data=json.dumps({'body': body}).encode(),
+    headers={'Authorization': 'Bearer ' + os.environ['GITHUB_TOKEN'], 'Accept': 'application/vnd.github+json'},
+    method='POST',
+)
+urllib.request.urlopen(req)
+"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Upload debug APKs
       uses: actions/upload-artifact@v7
