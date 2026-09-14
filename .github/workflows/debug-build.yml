@@ -136,8 +136,7 @@ jobs:
     - name: Locate the built APK(s) precisely
       id: find_apk
       run: |
-        cd ${{ github.workspace }}
-        FILES=$(find V2rayNG/app/build/outputs -iname "*.apk")
+        FILES=$(find ${{ github.workspace }}/V2rayNG/app/build/outputs -iname "*.apk")
         echo "found:"
         echo "$FILES"
         {
