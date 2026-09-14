@@ -127,13 +127,21 @@ jobs:
         REPO: ${{ github.repository }}
         SHA: ${{ github.sha }}
       run: |
+        set +e
         {
           echo '### Debug build failed — relevant output'
           echo '```'
-          grep -B2 -A30 -iE "^e: |error:|FAILURE:|What went wrong" /tmp/gradle_output.log | head -c 60000
+          MATCHED=$(grep -B2 -A40 -iE "^e: |error:|FAILURE:|What went wrong" /tmp/gradle_output.log 2>/dev/null)
+          if [ -n "$MATCHED" ]; then
+            echo "$MATCHED" | head -c 60000
+          else
+            echo '(no error/FAILURE pattern matched — last 150 lines of raw output instead)'
+            tail -150 /tmp/gradle_output.log | head -c 60000
+          fi
           echo '```'
         } > /tmp/error_comment.txt
-        python3 -c "import json,os,urllib.request; body=open('/tmp/error_comment.txt').read(); url='https://api.github.com/repos/'+os.environ['REPO']+'/commits/'+os.environ['SHA']+'/comments'; req=urllib.request.Request(url, data=json.dumps({'body':body}).encode(), headers={'Authorization':'Bearer '+os.environ['GITHUB_TOKEN'],'Accept':'application/vnd.github+json'}, method='POST'); urllib.request.urlopen(req)"
+        set -e
+        python3 -c "import json,os,urllib.request; body=open('/tmp/error_comment.txt').read(); url='https://api.github.com/repos/'+os.environ['REPO']+'/commits/'+os.environ['SHA']+'/comments'; req=urllib.request.Request(url, data=json.dumps({'body':body}).encode(), headers={'Authorization':'Bearer '+os.environ['GITHUB_TOKEN'],'Accept':'application/vnd.github+json'}, method='POST'); resp=urllib.request.urlopen(req); print('posted, status', resp.status)"
 
     - name: Locate the built APK(s) precisely
       id: find_apk
