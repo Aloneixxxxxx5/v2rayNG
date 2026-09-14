@@ -140,6 +140,12 @@ jobs:
         echo "using: $FIRST"
         echo "path=$FIRST" >> "$GITHUB_OUTPUT"
 
+    - name: '[diag] does the interpolated output path actually exist?'
+      continue-on-error: true
+      run: |
+        echo "value was: [${{ steps.find_apk.outputs.path }}]"
+        test -f "${{ steps.find_apk.outputs.path }}"
+
     - name: Upload debug APKs
       uses: actions/upload-artifact@v7
       with:
