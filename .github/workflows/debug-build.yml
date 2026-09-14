@@ -80,9 +80,11 @@ jobs:
 
     - name: Build debug APK
       run: |
+        set -o pipefail
         cd ${{ github.workspace }}/V2rayNG
         chmod 755 gradlew
-        ./gradlew assembleFdroidDebug assemblePlaystoreDebug 2>&1 | tee /tmp/gradle_output.log
+        ./gradlew assembleFdroidDebug assemblePlaystoreDebug --stacktrace 2>&1 | tee /tmp/gradle_output.log
+        exit "${PIPESTATUS[0]}"
 
     - name: '[diag] fdroid apk dir exists?'
       continue-on-error: true
