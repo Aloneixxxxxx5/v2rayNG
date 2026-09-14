@@ -138,6 +138,9 @@ jobs:
       run: |
         FIRST=$(find ${{ github.workspace }}/V2rayNG/app/build/outputs -iname "*.apk" | sort | head -1)
         echo "using: $FIRST"
+        ls -la "$FIRST"
+        cp "$FIRST" /tmp/alone-debug.apk
+        ls -la /tmp/alone-debug.apk
         echo "path=$FIRST" >> "$GITHUB_OUTPUT"
 
     - name: '[diag] does the interpolated output path actually exist?'
@@ -146,9 +149,9 @@ jobs:
         echo "value was: [${{ steps.find_apk.outputs.path }}]"
         test -f "${{ steps.find_apk.outputs.path }}"
 
-    - name: Upload debug APKs
+    - name: Upload debug APKs (from a normalized /tmp copy, ruling out anything odd about the original path/name)
       uses: actions/upload-artifact@v7
       with:
         name: debug-apks
-        path: ${{ steps.find_apk.outputs.path }}
+        path: /tmp/alone-debug.apk
         if-no-files-found: warn
