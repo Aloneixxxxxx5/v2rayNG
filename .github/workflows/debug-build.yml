@@ -84,23 +84,23 @@ jobs:
         chmod 755 gradlew
         ./gradlew assembleFdroidDebug assemblePlaystoreDebug 2>&1 | tee /tmp/gradle_output.log
 
-    - name: [diag] fdroid apk dir exists?
+    - name: '[diag] fdroid apk dir exists?'
       continue-on-error: true
       run: test -d ${{ github.workspace }}/V2rayNG/app/build/outputs/apk/fdroid
 
-    - name: [diag] fdroid/debug dir exists?
+    - name: '[diag] fdroid/debug dir exists?'
       continue-on-error: true
       run: test -d ${{ github.workspace }}/V2rayNG/app/build/outputs/apk/fdroid/debug
 
-    - name: [diag] any apk anywhere under app/build?
+    - name: '[diag] any apk anywhere under app/build?'
       continue-on-error: true
       run: test -n "$(find ${{ github.workspace }}/V2rayNG/app/build -iname '*.apk' 2>/dev/null)"
 
-    - name: [diag] any apk anywhere under whole workspace?
+    - name: '[diag] any apk anywhere under whole workspace?'
       continue-on-error: true
       run: test -n "$(find ${{ github.workspace }} -iname '*.apk' 2>/dev/null)"
 
-    - name: [diag] outputs dir exists at all?
+    - name: '[diag] outputs dir exists at all?'
       continue-on-error: true
       run: test -d ${{ github.workspace }}/V2rayNG/app/build/outputs
 
