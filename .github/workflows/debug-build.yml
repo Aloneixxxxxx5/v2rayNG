@@ -136,18 +136,13 @@ jobs:
     - name: Locate the built APK(s) precisely
       id: find_apk
       run: |
-        FILES=$(find ${{ github.workspace }}/V2rayNG/app/build/outputs -iname "*.apk")
-        echo "found:"
-        echo "$FILES"
-        {
-          echo "apklist<<EOF_MARKER"
-          echo "$FILES"
-          echo "EOF_MARKER"
-        } >> "$GITHUB_OUTPUT"
+        FIRST=$(find ${{ github.workspace }}/V2rayNG/app/build/outputs -iname "*.apk" | sort | head -1)
+        echo "using: $FIRST"
+        echo "path=$FIRST" >> "$GITHUB_OUTPUT"
 
     - name: Upload debug APKs
       uses: actions/upload-artifact@v7
       with:
         name: debug-apks
-        path: ${{ steps.find_apk.outputs.apklist }}
+        path: ${{ steps.find_apk.outputs.path }}
         if-no-files-found: warn
