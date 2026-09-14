@@ -20,6 +20,20 @@ jobs:
         submodules: 'recursive'
         fetch-depth: '0'
 
+    - name: '[diag] can this token even post a commit comment at all?'
+      continue-on-error: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        REPO: ${{ github.repository }}
+        SHA: ${{ github.sha }}
+      run: |
+        STATUS=$(curl -s -o /tmp/resp.json -w "%{http_code}" -X POST \
+          -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" \
+          "https://api.github.com/repos/$REPO/commits/$SHA/comments" \
+          -d '{"body":"connectivity test - safe to ignore/delete"}')
+        echo "http_status=$STATUS" >> "$GITHUB_OUTPUT" 2>/dev/null || true
+        test "$STATUS" = "201"
+
     - name: Setup Android SDK
       uses: android-actions/setup-android@v4
       with:
@@ -141,7 +155,12 @@ jobs:
           echo '```'
         } > /tmp/error_comment.txt
         set -e
-        python3 -c "import json,os,urllib.request; body=open('/tmp/error_comment.txt').read(); url='https://api.github.com/repos/'+os.environ['REPO']+'/commits/'+os.environ['SHA']+'/comments'; req=urllib.request.Request(url, data=json.dumps({'body':body}).encode(), headers={'Authorization':'Bearer '+os.environ['GITHUB_TOKEN'],'Accept':'application/vnd.github+json'}, method='POST'); resp=urllib.request.urlopen(req); print('posted, status', resp.status)"
+        STATUS=$(curl -s -o /tmp/resp.json -w "%{http_code}" -X POST \
+          -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" \
+          "https://api.github.com/repos/$REPO/commits/$SHA/comments" \
+          -d "$(python3 -c "import json; print(json.dumps({'body': open('/tmp/error_comment.txt').read()}))")")
+        echo "post status: $STATUS"
+        test "$STATUS" = "201"
 
     - name: Locate the built APK(s) precisely
       id: find_apk
