@@ -133,11 +133,22 @@ jobs:
         } > /tmp/error_comment.txt
         python3 -c "import json,os,urllib.request; body=open('/tmp/error_comment.txt').read(); url='https://api.github.com/repos/'+os.environ['REPO']+'/commits/'+os.environ['SHA']+'/comments'; req=urllib.request.Request(url, data=json.dumps({'body':body}).encode(), headers={'Authorization':'Bearer '+os.environ['GITHUB_TOKEN'],'Accept':'application/vnd.github+json'}, method='POST'); urllib.request.urlopen(req)"
 
+    - name: Locate the built APK(s) precisely
+      id: find_apk
+      run: |
+        cd ${{ github.workspace }}
+        FILES=$(find V2rayNG/app/build/outputs -iname "*.apk")
+        echo "found:"
+        echo "$FILES"
+        {
+          echo "apklist<<EOF_MARKER"
+          echo "$FILES"
+          echo "EOF_MARKER"
+        } >> "$GITHUB_OUTPUT"
+
     - name: Upload debug APKs
       uses: actions/upload-artifact@v7
       with:
         name: debug-apks
-        path: |
-          V2rayNG/app/build/outputs/apk/**/*.apk
-          V2rayNG/app/**/build/outputs/**/*.apk
+        path: ${{ steps.find_apk.outputs.apklist }}
         if-no-files-found: warn
