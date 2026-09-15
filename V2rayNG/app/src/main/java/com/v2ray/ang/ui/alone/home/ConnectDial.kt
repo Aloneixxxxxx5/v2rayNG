@@ -2,6 +2,7 @@ package com.v2ray.ang.ui.alone.home
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.rememberInfiniteTransition
@@ -15,8 +16,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -212,11 +215,11 @@ fun ConnectDial(
             Canvas(Modifier.size(ORBIT_SIZE.dp).graphicsLayer { rotationZ = if (reducedMotion) 0f else orbitSpin }) {
                 val dotAngles = floatArrayOf(0f, 120f, 238f)
                 dotAngles.forEachIndexed { i, aDeg ->
-                    val a = Math.toRadians(aDeg.toDouble() - 90.0)
-                    val cx = size.width / 2 + ORBIT_RADIUS.dp.toPx() * cos(a).toFloat()
-                    val cy = size.height / 2 + ORBIT_RADIUS.dp.toPx() * sin(a).toFloat()
+                    val aRad = (aDeg - 90f) * (kotlin.math.PI.toFloat() / 180f)
+                    val cx = size.width / 2 + ORBIT_RADIUS.dp.toPx() * cos(aRad)
+                    val cy = size.height / 2 + ORBIT_RADIUS.dp.toPx() * sin(aRad)
                     val twinklePhase = (pulseT * (2.6f / (2.6f + i * 0.6f)) + i * 0.33f) % 1f
-                    val alpha = 0.26f + (1f - 0.26f) * kotlin.math.abs(kotlin.math.sin(twinklePhase * Math.PI)).toFloat()
+                    val alpha = 0.26f + (1f - 0.26f) * kotlin.math.abs(kotlin.math.sin(twinklePhase * kotlin.math.PI.toFloat()))
                     drawCircle(color = colors.ok, radius = 2.5.dp.toPx(), center = Offset(cx, cy), alpha = alpha)
                 }
             }

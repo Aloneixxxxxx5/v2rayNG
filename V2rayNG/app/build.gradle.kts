@@ -157,7 +157,7 @@ dependencies {
 
     // AndroidX Core Libraries
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.core.splashscreen)
+    implementation("androidx.core:core-splashscreen:1.0.1") // direct coordinate — sidesteps any version-catalog accessor generation issue
     implementation(libs.androidx.appcompat)
 
     // Compose Libraries
@@ -193,6 +193,7 @@ dependencies {
     // AndroidX Lifecycle and Architecture Components
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.lifecycle.runtime.ktx)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.11.0") // provides androidx.lifecycle.viewmodel.compose.viewModel()
 
     // Background Task Libraries
     implementation(libs.work.runtime.ktx)

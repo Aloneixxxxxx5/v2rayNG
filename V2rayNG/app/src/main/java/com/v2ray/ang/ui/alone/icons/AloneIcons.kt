@@ -66,8 +66,8 @@ object Icons {
                 strokeLineCap = StrokeCap.Round, strokeLineJoin = StrokeJoin.Round, fill = null,
             ) {
                 moveTo(12f, 3.2f); lineTo(5f, 6.1f); lineTo(5f, 11.8f)
-                cubicTo(5f, 16.2f, 8f, 19.5f, 12f, 21f)
-                cubicTo(16f, 19.5f, 19f, 16.2f, 19f, 11.8f)
+                curveTo(5f, 16.2f, 8f, 19.5f, 12f, 21f)
+                curveTo(16f, 19.5f, 19f, 16.2f, 19f, 11.8f)
                 lineTo(19f, 6.1f); lineTo(12f, 3.2f)
                 moveTo(9.1f, 12.2f); lineTo(11.4f, 14.5f); lineTo(15.8f, 9.9f)
             }.build().also { _shield = it }
@@ -82,8 +82,8 @@ object Icons {
                 strokeLineCap = StrokeCap.Round, strokeLineJoin = StrokeJoin.Round, fill = null,
             ) {
                 moveTo(12f, 3.2f); lineTo(5f, 6.1f); lineTo(5f, 11.8f)
-                cubicTo(5f, 16.2f, 8f, 19.5f, 12f, 21f)
-                cubicTo(16f, 19.5f, 19f, 16.2f, 19f, 11.8f)
+                curveTo(5f, 16.2f, 8f, 19.5f, 12f, 21f)
+                curveTo(16f, 19.5f, 19f, 16.2f, 19f, 11.8f)
                 lineTo(19f, 6.1f); lineTo(12f, 3.2f)
                 moveTo(9.6f, 9.6f); lineTo(14.4f, 14.4f)
                 moveTo(14.4f, 9.6f); lineTo(9.6f, 14.4f)
@@ -128,8 +128,8 @@ object Icons {
             ) {
                 moveTo(3f, 12f); arcTo(9f, 9f, 0f, true, false, 21f, 12f); arcTo(9f, 9f, 0f, true, false, 3f, 12f)
                 moveTo(3f, 12f); lineTo(21f, 12f)
-                moveTo(12f, 3f); cubicTo(14.9f, 6.4f, 14.9f, 17.2f, 12f, 21f)
-                moveTo(12f, 3f); cubicTo(9.1f, 6.4f, 9.1f, 17.2f, 12f, 21f)
+                moveTo(12f, 3f); curveTo(14.9f, 6.4f, 14.9f, 17.2f, 12f, 21f)
+                moveTo(12f, 3f); curveTo(9.1f, 6.4f, 9.1f, 17.2f, 12f, 21f)
             }.build().also { _globe = it }
 
         /** i-chev — `.flip`'d (autoMirrored) at the call site for RTL, per the prototype's own convention. */
@@ -207,17 +207,17 @@ object Icons {
                 strokeLineCap = StrokeCap.Round, strokeLineJoin = StrokeJoin.Round, fill = null,
             ) {
                 moveTo(12f, 21.2f)
-                cubicTo(10.1f, 18.6f, 9.5f, 15.3f, 9.5f, 12.3f)
-                cubicTo(9.5f, 10.8f, 10.6f, 9.6f, 12f, 9.6f)
-                cubicTo(13.4f, 9.6f, 14.5f, 10.8f, 14.5f, 12.3f)
-                cubicTo(14.5f, 14.6f, 14.1f, 16.9f, 15.1f, 18.7f)
+                curveTo(10.1f, 18.6f, 9.5f, 15.3f, 9.5f, 12.3f)
+                curveTo(9.5f, 10.8f, 10.6f, 9.6f, 12f, 9.6f)
+                curveTo(13.4f, 9.6f, 14.5f, 10.8f, 14.5f, 12.3f)
+                curveTo(14.5f, 14.6f, 14.1f, 16.9f, 15.1f, 18.7f)
                 moveTo(6.5f, 18.6f)
-                cubicTo(5.3f, 16.2f, 5.1f, 13.4f, 5.1f, 12f)
+                curveTo(5.3f, 16.2f, 5.1f, 13.4f, 5.1f, 12f)
                 arcTo(6.9f, 6.9f, 0f, false, true, 18.9f, 12f)
-                cubicTo(18.9f, 13.4f, 18.8f, 15.5f, 18.1f, 17.5f)
+                curveTo(18.9f, 13.4f, 18.8f, 15.5f, 18.1f, 17.5f)
                 moveTo(3.5f, 8.5f)
                 arcTo(9.5f, 9.5f, 0f, false, true, 12f, 3.2f)
-                cubicTo(15.6f, 3.2f, 18.7f, 5.2f, 20.5f, 8.5f)
+                curveTo(15.6f, 3.2f, 18.7f, 5.2f, 20.5f, 8.5f)
             }.build().also { _fingerprint = it }
 
         /** i-lang — Language screen */
@@ -231,8 +231,8 @@ object Icons {
             ) {
                 moveTo(3f, 5.6f); lineTo(11.6f, 5.6f)
                 moveTo(7.3f, 5.6f); lineTo(7.3f, 3.4f)
-                moveTo(10f, 5.6f); cubicTo(10f, 9.7f, 7.1f, 13.1f, 3.4f, 14.5f)
-                moveTo(4.9f, 10.4f); cubicTo(6.1f, 13f, 8.4f, 14.9f, 11.1f, 15.7f)
+                moveTo(10f, 5.6f); curveTo(10f, 9.7f, 7.1f, 13.1f, 3.4f, 14.5f)
+                moveTo(4.9f, 10.4f); curveTo(6.1f, 13f, 8.4f, 14.9f, 11.1f, 15.7f)
                 moveTo(13.1f, 20.6f); lineTo(17f, 10.8f); lineTo(20.9f, 20.6f)
                 moveTo(14.5f, 17.4f); lineTo(19.3f, 17.4f)
             }.build().also { _lang = it }
@@ -298,9 +298,9 @@ object Icons {
             ) {
                 moveTo(6.6f, 10.7f)
                 arcTo(5.4f, 5.4f, 0f, false, true, 17.4f, 10.7f)
-                cubicTo(17.4f, 14.6f, 18.8f, 15.6f, 19.3f, 16.2f)
+                curveTo(17.4f, 14.6f, 18.8f, 15.6f, 19.3f, 16.2f)
                 lineTo(4.7f, 16.2f)
-                cubicTo(5.2f, 15.6f, 6.6f, 14.6f, 6.6f, 10.7f)
+                curveTo(5.2f, 15.6f, 6.6f, 14.6f, 6.6f, 10.7f)
                 moveTo(9.9f, 19.1f)
                 arcTo(2.3f, 2.3f, 0f, false, false, 14.1f, 19.1f)
             }.build().also { _bell = it }
