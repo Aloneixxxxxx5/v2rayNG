@@ -17,7 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -132,7 +132,7 @@ fun ConnectDial(
     val wave1 = remember { Animatable(0f) }
     val wave2 = remember { Animatable(0f) }
     val burst = remember { Animatable(1f) }
-    var wasOn by remember { mutableFloatStateOf(0f) }
+    var wasOn by remember { mutableStateOf(0f) }
     LaunchedEffect(state) {
         if (state == DialVisualState.ON && wasOn == 0f) {
             wasOn = 1f
