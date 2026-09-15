@@ -63,7 +63,7 @@ private val ROLE_LABEL_M = TypeRole(11f, 550, 1.36f, 0.02f)
 private val ROLE_LABEL_S = TypeRole(10f, 600, 1.34f, 0.045f)
 
 /** Not an M3 Typography slot — exposed separately, used for eyebrow/meta labels. */
-val AloneMicroRole = TypeRole(9.5f, 600, 1.30f, 0.09f)
+private val AloneMicroRole = TypeRole(9.5f, 600, 1.30f, 0.09f)
 
 /**
  * fa needs zero tracking (any letter-spacing breaks Arabic-script joining)

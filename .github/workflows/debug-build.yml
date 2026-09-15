@@ -93,6 +93,15 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
+    - name: '[diag] is core-splashscreen actually in the resolved classpath?'
+      continue-on-error: true
+      working-directory: ${{ github.workspace }}/V2rayNG
+      run: |
+        chmod 755 gradlew
+        ./gradlew :app:dependencies --configuration fdroidDebugRuntimeClasspath 2>&1 | grep -i splashscreen > /tmp/splash_dep.txt || true
+        cat /tmp/splash_dep.txt
+        test -s /tmp/splash_dep.txt
+
     - name: Build debug APK
       run: |
         set -o pipefail
