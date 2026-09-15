@@ -35,7 +35,7 @@ object AloneFonts {
 }
 
 /** One row of the type scale, before script rules (fa/en) are applied. */
-private data class TypeRole(
+internal data class TypeRole(
     val sizeSp: Float,
     val weight: Int,
     val lineHeightMultiplier: Float,

@@ -157,7 +157,7 @@ dependencies {
 
     // AndroidX Core Libraries
     implementation(libs.androidx.core.ktx)
-    implementation("androidx.core:core-splashscreen:1.0.1") // direct coordinate — sidesteps any version-catalog accessor generation issue
+    implementation("androidx.core:core-splashscreen:1.2.0") // 1.0.1 silently failed to resolve against this toolchain; 1.2.0 is current stable
     implementation(libs.androidx.appcompat)
 
     // Compose Libraries
