@@ -122,7 +122,7 @@ fun OnboardingScaffold(
 }
 
 @Composable
-private fun Dots(step: OnboardingStep) {
+internal fun Dots(step: OnboardingStep) {
     val colors = AloneTheme.colors
     Row(horizontalArrangement = Arrangement.spacedBy(5.dp), verticalAlignment = Alignment.CenterVertically) {
         OnboardingStep.entries.forEach { s ->
