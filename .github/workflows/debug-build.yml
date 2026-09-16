@@ -127,6 +127,37 @@ jobs:
           -d "$(python3 -c "import json; print(json.dumps({'body': open('/tmp/error_comment.txt').read()}))")")
         echo "post status: $STATUS"
 
+    - name: '[diag] actual SplashScreen class API surface from the real AAR'
+      continue-on-error: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        REPO: ${{ github.repository }}
+        SHA: ${{ github.sha }}
+      run: |
+        AAR=$(find ~/.gradle /root/.gradle /home/runner/.gradle -iname "core-splashscreen-*.aar" 2>/dev/null | head -1)
+        echo "aar: $AAR"
+        mkdir -p /tmp/splashextract
+        cd /tmp/splashextract
+        unzip -o -q "$AAR"
+        unzip -o -q classes.jar -d classes
+        find classes -iname "*SplashScreen*"
+        {
+          echo '### core-splashscreen AAR contents + SplashScreen API'
+          echo '```'
+          find classes -iname "*SplashScreen*"
+          echo '--- javap on SplashScreen.class ---'
+          javap -p classes/androidx/core/splashscreen/SplashScreen.class 2>&1
+          echo '--- javap on SplashScreenKt.class (top-level functions file), if it exists ---'
+          javap -p classes/androidx/core/splashscreen/SplashScreenKt.class 2>&1
+          echo '```'
+        } > /tmp/error_comment.txt
+        set -e
+        STATUS=$(curl -s -o /tmp/resp.json -w "%{http_code}" -X POST \
+          -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" \
+          "https://api.github.com/repos/$REPO/commits/$SHA/comments" \
+          -d "$(python3 -c "import json; print(json.dumps({'body': open('/tmp/error_comment.txt').read()}))")")
+        echo "post status: $STATUS"
+
     - name: Build debug APK
       run: |
         set -o pipefail
