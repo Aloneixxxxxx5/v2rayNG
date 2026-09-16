@@ -102,6 +102,31 @@ jobs:
         cat /tmp/splash_dep.txt
         test -s /tmp/splash_dep.txt
 
+    - name: '[diag] is core-splashscreen actually on the resolved classpath?'
+      continue-on-error: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        REPO: ${{ github.repository }}
+        SHA: ${{ github.sha }}
+      run: |
+        cd ${{ github.workspace }}/V2rayNG
+        chmod 755 gradlew
+        ./gradlew :app:dependencies --configuration fdroidDebugRuntimeClasspath > /tmp/deps.txt 2>&1
+        grep -i splashscreen /tmp/deps.txt > /tmp/splash_deps.txt || echo "NOT FOUND in dependency tree" > /tmp/splash_deps.txt
+        grep -i "kotlin_module_name\|kotlinOptions\|jvmTarget" /tmp/deps.txt | head -5 >> /tmp/splash_deps.txt || true
+        {
+          echo '### core-splashscreen dependency-tree check'
+          echo '```'
+          cat /tmp/splash_deps.txt
+          echo '```'
+        } > /tmp/error_comment.txt
+        set -e
+        STATUS=$(curl -s -o /tmp/resp.json -w "%{http_code}" -X POST \
+          -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" \
+          "https://api.github.com/repos/$REPO/commits/$SHA/comments" \
+          -d "$(python3 -c "import json; print(json.dumps({'body': open('/tmp/error_comment.txt').read()}))")")
+        echo "post status: $STATUS"
+
     - name: Build debug APK
       run: |
         set -o pipefail
