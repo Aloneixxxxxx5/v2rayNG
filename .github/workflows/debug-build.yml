@@ -134,21 +134,24 @@ jobs:
         REPO: ${{ github.repository }}
         SHA: ${{ github.sha }}
       run: |
-        AAR=$(find ~/.gradle /root/.gradle /home/runner/.gradle -iname "core-splashscreen-*.aar" 2>/dev/null | head -1)
-        echo "aar: $AAR"
+        set +e
+        AAR=$(find / -iname "core-splashscreen-*.aar" 2>/dev/null | head -1)
         mkdir -p /tmp/splashextract
         cd /tmp/splashextract
-        unzip -o -q "$AAR"
-        unzip -o -q classes.jar -d classes
-        find classes -iname "*SplashScreen*"
+        if [ -n "$AAR" ]; then
+          unzip -o -q "$AAR" 2>&1
+          unzip -o -q classes.jar -d classes 2>&1
+        fi
         {
           echo '### core-splashscreen AAR contents + SplashScreen API'
           echo '```'
-          find classes -iname "*SplashScreen*"
-          echo '--- javap on SplashScreen.class ---'
-          javap -p classes/androidx/core/splashscreen/SplashScreen.class 2>&1
-          echo '--- javap on SplashScreenKt.class (top-level functions file), if it exists ---'
-          javap -p classes/androidx/core/splashscreen/SplashScreenKt.class 2>&1
+          echo "AAR path: [$AAR]"
+          find /tmp/splashextract -iname "*SplashScreen*" 2>&1
+          echo '--- javap SplashScreen ---'
+          find /tmp/splashextract/classes -iname "SplashScreen*.class" 2>/dev/null | while read c; do
+            echo "-- $c --"
+            javap -p "$c" 2>&1
+          done
           echo '```'
         } > /tmp/error_comment.txt
         set -e
