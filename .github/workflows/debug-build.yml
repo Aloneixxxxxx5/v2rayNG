@@ -127,40 +127,6 @@ jobs:
           -d "$(python3 -c "import json; print(json.dumps({'body': open('/tmp/error_comment.txt').read()}))")")
         echo "post status: $STATUS"
 
-    - name: '[diag] actual SplashScreen class API surface from the real AAR'
-      continue-on-error: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        REPO: ${{ github.repository }}
-        SHA: ${{ github.sha }}
-      run: |
-        set +e
-        AAR=$(find / -iname "core-splashscreen-*.aar" 2>/dev/null | head -1)
-        mkdir -p /tmp/splashextract
-        cd /tmp/splashextract
-        if [ -n "$AAR" ]; then
-          unzip -o -q "$AAR" 2>&1
-          unzip -o -q classes.jar -d classes 2>&1
-        fi
-        {
-          echo '### core-splashscreen AAR contents + SplashScreen API'
-          echo '```'
-          echo "AAR path: [$AAR]"
-          find /tmp/splashextract -iname "*SplashScreen*" 2>&1
-          echo '--- javap SplashScreen ---'
-          find /tmp/splashextract/classes -iname "SplashScreen*.class" 2>/dev/null | while read c; do
-            echo "-- $c --"
-            javap -p "$c" 2>&1
-          done
-          echo '```'
-        } > /tmp/error_comment.txt
-        set -e
-        STATUS=$(curl -s -o /tmp/resp.json -w "%{http_code}" -X POST \
-          -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" \
-          "https://api.github.com/repos/$REPO/commits/$SHA/comments" \
-          -d "$(python3 -c "import json; print(json.dumps({'body': open('/tmp/error_comment.txt').read()}))")")
-        echo "post status: $STATUS"
-
     - name: Build debug APK
       run: |
         set -o pipefail

@@ -9,7 +9,7 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
-import androidx.core.splashscreen.SplashScreen
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.v2ray.ang.AngApplication
 import com.v2ray.ang.AppConfig
@@ -95,11 +95,11 @@ class MainActivity : HelperBaseComponentActivity() {
         // ALONE VPN: must be called before super.onCreate() — see SPLASH_INTEGRATION.md.
         // Keeps the system splash (Theme.AloneVpn.Splash, set in the manifest) on screen
         // until the first frame is ready, instead of a hand-animated Composable screen.
-        // Called as the plain static factory (SplashScreen.installSplashScreen(Activity)) rather
-        // than the Kotlin extension-function sugar — that import kept resolving to "unresolved
-        // reference" against this toolchain even though the dependency is confirmed on the
-        // classpath, so this sidesteps whatever Kotlin-metadata mismatch was causing it.
-        SplashScreen.installSplashScreen(this)
+        // Correct import goes through SplashScreen.Companion — a plain top-level
+        // `androidx.core.splashscreen.installSplashScreen` import (tried first) and a
+        // `SplashScreen.installSplashScreen(this)` static call (tried second) both failed to
+        // resolve; this is the actual documented form.
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         mainViewModel.onAction(MainAction.Initialize)
 
