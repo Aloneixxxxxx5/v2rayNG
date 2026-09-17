@@ -109,27 +109,32 @@ class MainActivity : HelperBaseComponentActivity() {
     @Composable
     override fun ScreenContent() {
         BackHandler { moveTaskToBack(false) }
-        MainScreen(
-            mainViewModel = mainViewModel,
-            onAction = { action ->
-                when (action) {
-                    MainAction.ToggleService -> handleFabAction()
-                    MainAction.TestCurrentServer -> handleLayoutTestClick()
-                    MainAction.ImportQRcode -> importQRcode()
-                    MainAction.ImportClipboard -> importClipboard()
-                    MainAction.ImportConfigLocal -> importConfigLocal()
-                    is MainAction.ImportManually -> importManually(action.type)
-                    MainAction.RestartService -> LauncherManager.restartServiceOrStart(this, ::requestServiceStart)
-                    MainAction.LocateSelectedServer -> mainViewModel.triggerLocateSelectedServer()
-                    is MainAction.SelectServer -> setSelectServer(action.guid)
-                    is MainAction.EditServer -> editServer(action.guid, action.profile)
-                    is MainAction.ShareClipboard -> shareToClipboard(action.guid)
-                    is MainAction.ShareFullContent -> shareFullContentAsync(action.guid)
-                    else -> mainViewModel.onAction(action)
-                }
-            },
-            onNavigate = { route -> navigateTo(route) },
-        )
+        com.v2ray.ang.ui.theme.AloneVpnTheme(themeId = "obsidian", isDark = true, isFarsi = true) {
+            com.v2ray.ang.ui.alone.home.AloneMainScreen(
+                mainViewModel = mainViewModel,
+                onAction = { action ->
+                    when (action) {
+                        MainAction.ToggleService -> handleFabAction()
+                        MainAction.TestCurrentServer -> handleLayoutTestClick()
+                        MainAction.ImportQRcode -> importQRcode()
+                        MainAction.ImportClipboard -> importClipboard()
+                        MainAction.ImportConfigLocal -> importConfigLocal()
+                        is MainAction.ImportManually -> importManually(action.type)
+                        MainAction.RestartService -> LauncherManager.restartServiceOrStart(this, ::requestServiceStart)
+                        MainAction.LocateSelectedServer -> mainViewModel.triggerLocateSelectedServer()
+                        is MainAction.SelectServer -> setSelectServer(action.guid)
+                        is MainAction.EditServer -> editServer(action.guid, action.profile)
+                        is MainAction.ShareClipboard -> shareToClipboard(action.guid)
+                        is MainAction.ShareFullContent -> shareFullContentAsync(action.guid)
+                        else -> mainViewModel.onAction(action)
+                    }
+                },
+                onOpenLog = { navigateTo(MainDestination.Logcat) },
+                onOpenHelp = { navigateTo(MainDestination.About) },
+                onOpenServers = { navigateTo(MainDestination.Subscriptions) },
+                onOpenDns = { navigateTo(MainDestination.PerAppProxy) },
+            )
+        }
     }
 
     private fun shareToClipboard(guid: String): Boolean =
