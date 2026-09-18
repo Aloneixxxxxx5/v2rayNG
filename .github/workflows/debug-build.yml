@@ -219,3 +219,33 @@ jobs:
         name: debug-apks
         path: ${{ steps.find_apk.outputs.path }}
         if-no-files-found: warn
+
+    - name: Publish to a stable "debug-latest" GitHub Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        REPO: ${{ github.repository }}
+        SHA: ${{ github.sha }}
+        APK_PATH: ${{ steps.find_apk.outputs.path }}
+      run: |
+        set +e
+        # Delete any previous "debug-latest" release + tag so we always have exactly one, current, stable link.
+        REL_ID=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" \
+          "https://api.github.com/repos/$REPO/releases/tags/debug-latest" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('id',''))")
+        if [ -n "$REL_ID" ]; then
+          curl -s -X DELETE -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$REPO/releases/$REL_ID"
+        fi
+        curl -s -X DELETE -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" \
+          "https://api.github.com/repos/$REPO/git/refs/tags/debug-latest"
+
+        set -e
+        CREATE_RESP=$(curl -s -X POST -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" \
+          "https://api.github.com/repos/$REPO/releases" \
+          -d "$(python3 -c "import json; print(json.dumps({'tag_name':'debug-latest','target_commitish':'$SHA','name':'ALONE VPN — latest debug build','body':'Auto-published by the debug-build workflow on every successful compile. Debug-signed, for install/testing only. Commit: $SHA','prerelease':True,'draft':False}))")")
+        UPLOAD_URL=$(echo "$CREATE_RESP" | python3 -c "import json,sys; print(json.load(sys.stdin)['upload_url'].split('{')[0])")
+        echo "upload_url: $UPLOAD_URL"
+        curl -s -X POST \
+          -H "Authorization: Bearer $GITHUB_TOKEN" \
+          -H "Content-Type: application/vnd.android.package-archive" \
+          --data-binary "@$APK_PATH" \
+          "$UPLOAD_URL?name=alone-vpn-debug.apk"
